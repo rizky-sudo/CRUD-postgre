@@ -1,0 +1,562 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+
+<html>
+=======
+<html lang="en">
+>>>>>>> ed91e2777aacab980ab8cc206c222370317fd2db
+
+​
+
+<head>
+
+<<<<<<< HEAD
+  <script src="/javascripts/jquery-3.5.1.min.js"></script>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <title>Crud PostgreSql</title>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+</head>
+
+​
+
+<body>
+
+  <div class="container">
+
+    <h1>BREAD (Browse, Read, Edit, Add, Delete)</h1>
+
+    <h2>Filters</h2>
+
+    <br />
+
+    <form action="/" method="GET" id="form-filter">
+
+
+      <!--       ID        -->
+      <input type="hidden" name="page" value="1">
+      <div class="form-group row">
+        <label for="id" class="col-sm-2 col-form-label"><input type="checkbox" name="check1"> ID</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="myInput" placeholder="ID" name="id" value="">
+        </div>
+      </div>
+
+
+      <!-- String -->
+      <div class="form-group row">
+        <label for="string" class="col-sm-2 col-form-label"><input type="checkbox" name="check2"> String</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="myInput" placeholder="string" name="string" value="">
+        </div>
+      </div>
+
+
+      <!-- Integer -->
+      <div class="form-group row">
+        <label for="integer" class="col-sm-2 col-form-label"><input type="checkbox" name="check3"> Integer</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="myInput" placeholder="integer" name="integer" value="">
+        </div>
+      </div>
+
+
+      <!-- Float -->
+      <div class="form-group row">
+        <label for="float" class="col-sm-2 col-form-label"><input type="checkbox" name="check4"> Float</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="myInput" placeholder="float" name="float" value="">
+        </div>
+      </div>
+
+
+      <!-- Date -->
+      <div class="form-group row">
+        <label for="startDate" class="col-2 col-form-label"><input type="checkbox" name="check5"> Date</label>
+        <div class="col-2">
+          <input class="form-control" type="date" value="startdate" id="myInput" name="startdate">
+        </div>
+        <div class="col-8"></div>
+        <div class="col-2"></div>
+        ​
+        <div class="col-2">
+          to
+        </div>
+        <div class="col-8"></div>
+        <div class="col-2"></div>
+        ​
+        <div class="col-2">
+          <input class="form-control" type="date" value="enddate" id="myInput" name="enddate">
+        </div>
+        <div class="col-8"></div>
+      </div>
+
+      ​
+
+      <!-- Boolean -->
+      <div class="form-group row">
+        <label for="boolean" class="col-2 col-form-label"><input type="checkbox" name="check6"> Boolean</label>
+        <div class="col-10">
+          <select id="myInput" class="form-control" name="boolean">
+            <option disabled selected>Choose the boolean...</option>
+            <option value="true"></option>True</option>
+            <option value="false"></option>False</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row">
+        <div class="col-sm-10">
+          <button type="submit" name="button" class="btn btn-primary btn-search">Search</button>
+        </div>
+      </div>
+    </form>
+    ​
+
+    <!--VIEW DATA TABLE-->
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">ID</th>
+          <th scope="col">String</th>
+          <th scope="col">Integer</th>
+          <th scope="col">Float</th>
+          <th scope="col">Date</th>
+          <th scope="col">Boolean</th>
+          <th scope="col">Action</th>
+        </tr>
+      </thead>
+      <tbody id="myTable">
+        ​
+      </tbody>
+    </table>
+    <!--PAGINATION-->
+
+    ​
+    <div class="form-group row">
+      <a href="api/index/add/"><button type="button" class="btn btn-primary">Add</button></a>
+    </div>
+
+  </div> ​
+
+  <script type="text/javascript">
+    const API_URL = 'http://localhost:3000/api/index';
+    $(document).ready(function () {
+
+      getresp()
+      $("#myInput").on("keyup", function () {
+        var value = $(this).val().toLowerCase();
+        $("#myTable tr").filter(function () {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+
+
+      $('#form-input').submit(function (e) {
+        e.preventDefault()
+        addResp()
+        $('#form-input').trigger("reset");
+      })
+
+
+      $("table tbody").on("click", ".btn-delete", function () {
+        if (confirm("Are you sure ?")) {
+          deleteResp($(this).attr("resp-id"));
+        }
+      })
+      $("table tbody").on("click", ".btn-edit", function () {
+        editResp($(this).attr("resp-edit"));
+      })
+      $('#form-edit').submit(function (e) {
+        e.preventDefault()
+        editResp()
+        $('#form-edit').trigger("reset");
+      })
+    })
+
+    const getresp = () => {
+      $.ajax({
+        method: "GET",
+        url: API_URL,
+        dataType: "json"
+
+      })
+        .done(function (resp) {
+          let html = '';
+          resp.forEach(item => {
+            html += `<tr>
+          <th scope="row">${item.id}</th>
+          <td class="String">${item.string}</td>
+          <td class="Integer">${item.integer}</td>
+          <td class="Float">${item.float}</td>
+          <td class="Date">${item.date}</td>
+          <td class="Boolean">${item.boolean}</td>
+          <td class="Action">
+            <a href="api/index/edit/${item.id}" button resp-edit="${item.id}" type="submit" class="btn btn-success btn-edit">Edit</a>
+            <button resp-id="${item.id}" type="submit" class="btn btn-danger btn-delete">Delete</button>
+          </td>
+          </tr>`
+
+          });
+          $('table tbody').html(html)
+        })
+        .fail(function (jqXHR, textStatus) {
+          alert("Request failed get data: " + textStatus);
+        })
+    };
+
+    const addResp = () => {
+      $.ajax({
+        method: "POST",
+        url: `${API_URL}/add`,
+        dataType: "json",
+        data: { string: $('#string').val(), integer: $('#integer').val(), float: $('#float').val(), date: $('#date').val(), boolean: $('#boolean').val() }
+
+      })
+        .done(function (resp) {
+          getresp()
+        })
+        .fail(function (jqXHR, textStatus) {
+          alert("Request failed delete data: " + textStatus);
+        })
+    }
+
+    const deleteResp = (id) => {
+      $.ajax({
+        method: "DELETE",
+        url: `${API_URL}/${id}`,
+        dataType: "json"
+      })
+        .done(function (resp) {
+          getresp()
+        })
+        .fail(function (jqXHR, textStatus) {
+          alert("Request failed delete data: " + textStatus);
+        })
+    }
+
+    const editResp = () => {
+      $.ajax({
+        method: "PUT",
+        url: `${API_URL}/edit/:${id}`,
+        dataType: "json",
+        data: { string: $('#string').val(), integer: $('#integer').val(), float: $('#float').val(), date: $('#date').val(), boolean: $('#boolean').val() }
+      })
+        .done(function (resp) {
+          getresp()
+          console.log({ resp })
+        })
+        .fail(function (jqXHR, textStatus) {
+          alert("Request failed Update data: " + textStatus);
+        })
+    }
+  </script>
+=======
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Document</title>
+
+</head>
+
+<style>
+    table {
+        border-collapse: collapse;
+        border: none;
+        margin-left: 110px;
+        width: 750px;
+    }
+
+    th,
+    td {
+        text-align: left;
+        padding: 10px;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f1f1f1;
+    }
+
+    .table-label {
+        font-weight: bold;
+    }
+
+    .header {
+        padding-top: 20px;
+        position: relative;
+        left: 120px;
+    }
+
+    .check {
+        position: relative;
+        left: 115px;
+        font-size: large;
+    }
+
+    #id {
+        position: relative;
+        left: 150px;
+        padding: 5px;
+        width: 535px;
+    }
+
+    #string {
+        position: relative;
+        left: 115px;
+        padding: 5px;
+        width: 535px;
+    }
+
+    #integer {
+        position: relative;
+        left: 105px;
+        padding: 5px;
+        width: 535px;
+    }
+
+    #float {
+        position: relative;
+        left: 132px;
+        padding: 5px;
+        width: 353px;
+    }
+
+    #startdate {
+        position: relative;
+        left: 130px;
+        padding: 5px;
+    }
+
+    .enddate {
+        position: relative;
+        left: 200px;
+        padding: 5px;
+    }
+
+    #boolean {
+        position: relative;
+        left: 98px;
+        padding: 5px;
+        width: 535px;
+    }
+
+    .botton-search {
+        position: relative;
+        left: 107px;
+        top: 10px;
+        background-color: rgb(54, 169, 235);
+        border: none;
+        color: white;
+        padding: 8px 8px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .button-edit {
+        background-color: #4caf50;
+        border: none;
+        color: white;
+        padding: 6px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 10px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .button-delete {
+        background-color: rgb(192, 69, 69);
+        border: none;
+        color: white;
+        padding: 2px 2px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 10px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .button-add {
+        position: relative;
+        left: 120px;
+        top: 10px;
+        background-color: rgb(54, 169, 235);
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    u1 {
+        list-style: none;
+        position: relative;
+        left: 100px;
+        padding: 0;
+        overflow: hidden;
+        border-color: none;
+    }
+
+    qi {
+        float: left;
+    }
+
+    qi a {
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        color: rgb(54, 169, 235);
+        border-color: blue;
+        background-color: rgb(255, 255, 255);
+        border: 1px solid black;
+        border-top-left-radius: 1px solid black;
+    }
+</style>
+<link rel="stylesheet" sherf="../public/style.css">
+
+<body>
+    <div class="header">
+        <h1>BREAD (browser, read, edit, add, delete)</h1>
+        <h2>Filters</h2>
+    </div>
+    <form action="/" method="GET">
+
+        <div class="check">
+
+            <input type="checkbox" name="check1" <%= query.check1 ? 'checked' : '' %>>
+
+            <label>ID</label>
+
+            <input type="integer" name="id" placeholder="ID" id="id" />
+
+        </div>
+        <br />
+        <div class="check">
+
+            <input type="checkbox" name="check2" <%= query.check2 ? 'checked' : '' %>>
+
+            <label>String</label>
+
+            <input type="text" name="string" placeholder="string" id="string" />
+        </div>
+        <br />
+        <div class="check">
+
+            <input type="checkbox" name="check3" <%= query.check3 ? 'checked' : '' %>>
+
+            <label>Integer</label>
+
+            <input type="integer" name="integer" placeholder="integer" id="integer" />
+        </div>
+        <br />
+        <div class="check">
+
+            <input type="checkbox" name="check4" <%= query.check4 ? 'checked' : '' %>>
+
+            <label>Float</label>
+
+            <input type="text" name="float" placeholder="float" id="float" />
+        </div>
+        <br />
+        <div class="check">
+
+            <input type="checkbox" name="check5" <%= query.check5 ? 'checked' : '' %>>
+
+            <label>Date</label>
+
+            <input type="text" name="startdate" placeholder="startdate" id="startdate" />
+            <div class="enddate">
+                to
+                <br />
+                <input type="text" name="enddate" placeholder="enddate" id="enddate" style="padding: 5px;" />
+            </div>
+        </div>
+        <br />
+        <div class="check">
+
+            <input type="checkbox" name="check6" <%= query.check6 ? 'checked' : '' %>>
+
+            <label>Boolean</label>
+
+            <select name="boolean" id="boolean" />
+            <option disabled selected>choose the boolean...</option>
+            <option value="true" <%= query.boolean == "true" ? 'selected' : '';%>>true</option>
+            <option value="false" <%= query.boolean == "false" ? 'selected' : '';%>>false</option>
+            </select>
+            <br />
+        </div>
+        <button class="botton-search" type="submit">Search</button>
+        <br />
+    </form>
+    <br />
+    <table border="1">
+        <tr class="table-label">
+            <td>ID</td>
+            <td>String</td>
+            <td>Integer</td>
+            <td>Float</td>
+            <td>Date</td>
+            <td>Boolean</td>
+            <td>Actions</td>
+        </tr>
+        <% crud.forEach((item) => { %>
+        <tr>
+            <td><%= item.id %></td>
+            <td><%= item.string %></td>
+            <td><%= item.integer %></td>
+            <td><%= item.float %></td>
+            <td><%= item.date %></td>
+            <td><%= item.boolean %></td>
+            <td>
+                <a href="/edit/<%= item.id %>">
+
+                    <button class="button-edit">Edit</button></a>
+
+                <a href="/delete/<%= item.id %>" class="button-delete">
+
+                    <button class="button-delete">Delete</button></a>
+            </td>
+        </tr>
+        <% }) %>
+    </table>
+    <nav aria-label="halaman navigation example">
+        <ul class="pagination">
+            <li class="halaman-item <%= halaman == 1 ? 'disabled': ''; %>"><a class="halaman-link" href="/?halaman=<%= parseInt(halaman) - 1%>">previous</a></li>
+                <% for (let i = 1; i <= hall; i++) { %>
+                    <li class=" halaman-item <%= halaman == i ? 'active': ''; %>"><a class="halaman-link"
+                        href="/?halaman=<%= i %>">
+                        <%= i %></a></li>
+            <% }; %>
+            <li class="halaman-item <%= halaman == hall ? 'disanbled': ''; %>"><a class="halaman-link"
+                    href="/?halaman= <%= parseInt(halaman) + 1%>">Next</a>
+        </ul>
+        </ul>
+    </nav>
+    <a href="add"><button class="button-add">Add</button></a>
+>>>>>>> ed91e2777aacab980ab8cc206c222370317fd2db
+</body>
+
+</html>

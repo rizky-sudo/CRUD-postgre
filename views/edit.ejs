@@ -1,0 +1,181 @@
+<<<<<<< HEAD
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+<body>
+    <div class="container">
+        <form action="" method="POST" id="form-edit">
+        <h1>Edit data</h1>
+
+        <div class="from-group row">
+            <laber for="example-text-input" class="col-2 col-form-label">String</laber>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" placeholder="string" id="inputString" name="string"
+                    value="<%= item.sring %>">
+            </div>
+        </div>
+        <br />
+
+        <div class="from-group row">
+            <laber for="example-text-input" class="col-2 col-form-label">Integer</laber>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" placeholder="integer" id="inputInteger" name="integer"
+                    value="<%= item.integer %>">
+            </div>
+        </div>
+        <br />
+
+        <div class="from-group row">
+            <laber for="example-text-input" class="col-2 col-form-label">Float</laber>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" placeholder="float" id="inputFloat" name="float"
+                    value="<%= item.float %>">
+            </div>
+        </div>
+        <br />
+
+        <div class="from-group row">
+            <laber for="example-text-input" class="col-2 col-form-label">Date</laber>
+            <div class="col-sm-10">
+                <input class="form-control" type="text" placeholder="date" id="inputDate" name="date"
+                    value="<%= item.date %>">
+            </div>
+        </div>
+        <br />
+
+        <div class="form-group row">
+            <label for="example-number-input" class="col-2 col-form-label">Boolean</label>
+            <div class="col-10">
+                <select class="custom-select" name="boolean" id="boolean" value="<%= item.boolean %>">
+
+                    <!-- <option value="">Choose the boolean ...</option> -->
+                    <option value="true" <%= item.boolean == "true" ? ' selected' : '';%>>True</option>
+                    <option value="false" <%= item.boolean == "false" ? ' selected' : '';%>>False</option>
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update</button>
+        <a href="/" class="btn btn-warning">Back</a>
+    </form>
+    </div>
+</body>
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .header {
+        padding-top: 20px;
+        position: relative;
+        left: 120px;
+    }
+
+    .input-name {
+        position: relative;
+        left: 0px;
+        font-size: large;
+    }
+
+    #id {
+        position: relative;
+        left: 90px;
+        width: 353px;
+        padding: 5px;
+    }
+
+    #string {
+        position: relative;
+        left: 56px;
+        width: 353px;
+        padding: 5px;
+    }
+
+    #integer {
+        position: relative;
+        left: 45px;
+        width: 353px;
+        padding: 5px;
+    }
+
+    #float {
+        position: relative;
+        left: 65px;
+        width: 353px;
+        padding: 5px;
+    }
+
+    #date {
+        position: relative;
+        left: 70px;
+        width: 353px;
+        padding: 5px;
+    }
+
+    #boolean {
+        position: relative;
+        left: 40px;
+        width: 353px;
+        padding: 5px;
+    }
+
+    .button-edit {
+        position: relative;
+        left: 0px;
+        top: 10px;
+        background-color: rgb(94, 115, 233);
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+</style>
+
+<body>
+    <div class="header">
+        <h1>Edit data</h1>
+        <form action="/edit/<%= crud.id %>" method="post">
+            <label class="input-name" for="">ID</label>
+            <input id="id" type="integer" name="id" value="<%= crud.id %>" required />
+            <br />
+            <br />
+            <label class="input-name" for="">String</label>
+            <input id="string" type="text" name="string" value="<%= crud.string %>" required />
+            <br />
+            <br />
+            <label class="input-name" for="">integer</label>
+            <input id="integer" type="number" name="integer" value="<%= crud.integer %>" required />
+            <br />
+            <br />
+            <label class="input-name" for="">Float</label>
+            <input id="float" type="text" name="float" value="<%= crud.float %>" required />
+            <br />
+            <br />
+            <label class="input-name" for="">Date</label>
+            <input id="date" type="text" name="date" value="<%= crud.date %>" required />
+            <br />
+            <br />
+            <label class="input-name" for="">Boolean</label>
+            <input id="boolean" type="text" name="boolean" value="<%= crud.boolean %>" required />
+            <br />
+            <br />
+            <button class="button-edit" type="submit">Update</button>
+            <br />
+        </form>
+
+
+
+</body>
+
+</html>
+>>>>>>> ed91e2777aacab980ab8cc206c222370317fd2db
